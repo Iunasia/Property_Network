@@ -12,10 +12,16 @@ const register = async (role, data) => {
   const hashedPassword = await bcrypt.hash(data.password, 10)
   data.password = hashedPassword
 
-  if (role === 'buyer') return await Buyer.create(data)
-  if (role === 'agent') return await Agent.create(data)
-  if (role === 'admin') return await Admin.create(data)
-  throw new Error('Invalid role')
+  let user
+  if (role === 'buyer') user = await Buyer.create(data)
+  else if (role === 'agent') user = await Agent.create(data)
+  else if (role === 'admin') user = await Admin.create(data)
+  else throw new Error('Invalid role')
+
+  const idField = `${role}_id`
+  const token = generateToken(user[idField], role)
+
+  return { token }
 }
 
 const login = async (role, email, password) => {
@@ -33,7 +39,7 @@ const login = async (role, email, password) => {
   const idField = `${role}_id`
   const token = generateToken(user[idField], role)
 
-  return { token, user }
+  return { token }
 }
 
 module.exports = { register, login }

@@ -13,7 +13,7 @@ const QaAnswer = sequelize.define('QaAnswer', {
     },
     is_helpful: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        defaultValue: false,
     },
     question_id: {
         type: DataTypes.INTEGER,

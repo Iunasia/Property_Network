@@ -19,7 +19,7 @@ const Listing = sequelize.define('Listing', {
     allowNull: false,
   },
   property_type: {
-    type: DataTypes.ENUM('house', 'apartment', 'land', 'commercial'),
+    type: DataTypes.ENUM('house', 'apartment', 'condo', 'villa', 'flat'),
     allowNull: false,
   },
   city: {
@@ -30,7 +30,7 @@ const Listing = sequelize.define('Listing', {
     type: DataTypes.STRING,
   },
   status: {
-    type: DataTypes.ENUM('available', 'sold', 'pending'),
+    type: DataTypes.ENUM('available', 'pending', 'sold', 'archived'),
     defaultValue: 'available',
   },
   agent_id: {
