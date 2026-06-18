@@ -16,6 +16,8 @@ const appointmentRoutes = require('./routes/appointmentRoutes')
 const reportRoutes = require('./routes/reportRoutes')
 const reviewRoutes = require('./routes/reviewRoutes')
 
+const errorHandler = require('./middleware/errorHandler')
+
 app.use('/api/auth', authRoutes)
 app.use('/api/listings', listingRoutes)
 app.use('/api/buyers', buyerRoutes)
@@ -29,5 +31,7 @@ app.use('/api/reviews', reviewRoutes)
 app.get('/', (req, res) => {
   res.json({ message: 'Property Network API is running' })
 })
+
+app.use(errorHandler)
 
 module.exports = app
