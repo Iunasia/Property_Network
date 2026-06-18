@@ -1,121 +1,92 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from './hooks/useAuth'
+
+// Auth
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
+
+// Buyer
+import BuyerHome from './pages/buyer/Home'
+import BuyerListingDetail from './pages/buyer/ListingDetail'
+import SavedListings from './pages/buyer/SavedListings'
+import Compare from './pages/buyer/Compare'
+import BuyerAppointments from './pages/buyer/Appointments'
+import BuyerMessages from './pages/buyer/Messages'
+import Notifications from './pages/buyer/Notifications'
+import BuyerProfile from './pages/buyer/Profile'
+
+// Agent
+import AgentDashboard from './pages/agent/Dashboard'
+import ManageListings from './pages/agent/ManageListings'
+import CreateListing from './pages/agent/CreateListing'
+import EditListing from './pages/agent/EditListing'
+import AgentListingDetail from './pages/agent/ListingDetail'
+import AgentAppointments from './pages/agent/Appointments'
+import AgentMessages from './pages/agent/Messages'
+import AgentProfile from './pages/agent/Profile'
+
+// Admin
+import AdminDashboard from './pages/admin/Dashboard'
+import ManageUsers from './pages/admin/ManageUsers'
+import AdminManageListings from './pages/admin/ManageListings'
+import ManageReports from './pages/admin/ManageReports'
+
+// Shared
+import NotFound from './pages/NotFound'
+import Layout from './components/layout/Layout'
+
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user } = useAuth()
+  if (!user) return <Navigate to="/login" />
+  if (!allowedRoles.includes(user.role)) return <Navigate to="/login" />
+  return children
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <BrowserRouter>
+      <Routes>
+        {/* Public */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-      <div className="ticks"></div>
+        {/* Buyer */}
+        <Route path="/buyer" element={<ProtectedRoute allowedRoles={['buyer']}><Layout /></ProtectedRoute>}>
+          <Route index element={<BuyerHome />} />
+          <Route path="listings/:id" element={<BuyerListingDetail />} />
+          <Route path="saved" element={<SavedListings />} />
+          <Route path="compare" element={<Compare />} />
+          <Route path="appointments" element={<BuyerAppointments />} />
+          <Route path="messages" element={<BuyerMessages />} />
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="profile" element={<BuyerProfile />} />
+        </Route>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Agent */}
+        <Route path="/agent" element={<ProtectedRoute allowedRoles={['agent']}><Layout /></ProtectedRoute>}>
+          <Route index element={<AgentDashboard />} />
+          <Route path="listings" element={<ManageListings />} />
+          <Route path="listings/create" element={<CreateListing />} />
+          <Route path="listings/edit/:id" element={<EditListing />} />
+          <Route path="listings/:id" element={<AgentListingDetail />} />
+          <Route path="appointments" element={<AgentAppointments />} />
+          <Route path="messages" element={<AgentMessages />} />
+          <Route path="profile" element={<AgentProfile />} />
+        </Route>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        {/* Admin */}
+        <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><Layout /></ProtectedRoute>}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<ManageUsers />} />
+          <Route path="listings" element={<AdminManageListings />} />
+          <Route path="reports" element={<ManageReports />} />
+        </Route>
+
+        {/* Default */}
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
