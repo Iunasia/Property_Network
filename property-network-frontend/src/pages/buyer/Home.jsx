@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import api from '../../services/api'
+import ListingCard from '../../components/common/ListingCard'
+import Spinner from '../../components/common/Spinner'
 
 const Home = () => {
   const [listings, setListings] = useState([])
   const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -21,25 +21,28 @@ const Home = () => {
     fetchListings()
   }, [])
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <Spinner />
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Available Listings</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-        {listings.map((listing) => (
-          <div key={listing.listing_id} style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px' }}>
-            <h3>{listing.title}</h3>
-            <p>{listing.city}</p>
-            <p>{listing.property_type}</p>
-            <p>${listing.price}</p>
-            <p>Status: {listing.status}</p>
-            <button onClick={() => navigate(`/buyer/listings/${listing.listing_id}`)}>
-              View Details
-            </button>
-          </div>
-        ))}
+    <div>
+      <div style={{ marginBottom: '24px' }}>
+        <h2>Available Properties</h2>
+        <p style={{ color: 'var(--text-muted)' }}>Explore the latest listings matching your search criteria.</p>
       </div>
+      
+      {listings.length === 0 ? (
+        <p>No listings found.</p>
+      ) : (
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+          gap: '24px' 
+        }}>
+          {listings.map((listing) => (
+            <ListingCard key={listing.listing_id} listing={listing} basePath="/buyer/listings" />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

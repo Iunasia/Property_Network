@@ -13,42 +13,43 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.logo}>
-        <Link to="/">Property Network</Link>
+      <div className={styles.leftSection}>
+        <div className={styles.logo}>
+          <Link to="/">Property Network</Link>
+        </div>
+        
+        {/* Main Public Navigation Links (Always visible) */}
+        <div className={styles.primaryLinks}>
+          <Link to="/">Buy</Link>
+          <Link to="/">Rent</Link>
+          <Link to="/">Sold</Link>
+          <Link to="/">Find Agents</Link>
+        </div>
       </div>
-      <div className={styles.links}>
+
+      <div className={styles.rightSection}>
+        {/* Role-based Links */}
         {user?.role === 'buyer' && (
           <>
-            <Link to="/buyer">Home</Link>
-            <Link to="/buyer/saved">Saved</Link>
-            <Link to="/buyer/appointments">Appointments</Link>
-            <Link to="/buyer/messages">Messages</Link>
-            <Link to="/buyer/notifications">Notifications</Link>
-            <Link to="/buyer/profile">Profile</Link>
+            <Link to="/buyer" className={styles.navButton}>Dashboard</Link>
+            <Link to="/buyer/saved" className={styles.navButton}>Saved</Link>
           </>
         )}
         {user?.role === 'agent' && (
-          <>
-            <Link to="/agent">Dashboard</Link>
-            <Link to="/agent/listings">Listings</Link>
-            <Link to="/agent/appointments">Appointments</Link>
-            <Link to="/agent/messages">Messages</Link>
-            <Link to="/agent/profile">Profile</Link>
-          </>
+          <Link to="/agent" className={styles.navButton}>Agent Dashboard</Link>
         )}
         {user?.role === 'admin' && (
+          <Link to="/admin" className={styles.navButton}>Admin Panel</Link>
+        )}
+
+        {/* Auth Actions */}
+        {user ? (
+          <button onClick={handleLogout} className={styles.navButton}>Sign out</button>
+        ) : (
           <>
-            <Link to="/admin">Dashboard</Link>
-            <Link to="/admin/users">Users</Link>
-            <Link to="/admin/listings">Listings</Link>
-            <Link to="/admin/reports">Reports</Link>
+            <Link to="/login" className={styles.navButton}>Sign in</Link>
+            <Link to="/register" className={styles.joinButton}>Join</Link>
           </>
-        )}
-        {user && (
-          <button onClick={handleLogout}>Logout</button>
-        )}
-        {!user && (
-          <Link to="/login">Login</Link>
         )}
       </div>
     </nav>

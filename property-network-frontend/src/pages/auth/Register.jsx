@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import authService from '../../services/authService'
+import styles from './Auth.module.css'
 
 const Register = () => {
   const [role, setRole] = useState('buyer')
@@ -34,70 +35,86 @@ const Register = () => {
   }
 
   return (
-    <div style={{ maxWidth: '400px', margin: '100px auto', padding: '20px' }}>
-      <h2>Register</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Role</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="buyer">Buyer</option>
-            <option value="agent">Agent</option>
-          </select>
-        </div>
-        <div>
-          <label>Full Name</label>
-          <input
-            type="text"
-            name="full_name"
-            value={formData.full_name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Phone</label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        {role === 'agent' && (
-          <div>
-            <label>Agency Name</label>
+    <div className={styles.authPage}>
+      <Link to="/" className={styles.backHome}>← Back to Property Network</Link>
+      <div className={styles.overlay}></div>
+      <div className={`glass-panel ${styles.authContainer}`}>
+        <h2 className={styles.authTitle}>Join Us</h2>
+        <p className={styles.authSubtitle}>Create your account today</p>
+        
+        {error && <p style={{ color: '#e53e3e', marginBottom: '1rem', fontWeight: 600 }}>{error}</p>}
+        
+        <form onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <label>Register as</label>
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="buyer">Buyer</option>
+              <option value="agent">Real Estate Agent</option>
+            </select>
+          </div>
+          <div className={styles.formGroup}>
+            <label>Full Name</label>
             <input
               type="text"
-              name="agency_name"
-              value={formData.agency_name}
+              name="full_name"
+              value={formData.full_name}
               onChange={handleChange}
+              placeholder="John Doe"
+              required
             />
           </div>
-        )}
-        <button type="submit">Register</button>
-      </form>
-      <p>Already have an account? <Link to="/login">Login</Link></p>
+          <div className={styles.formGroup}>
+            <label>Email Address</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="john@example.com"
+              required
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Phone Number</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="0412 345 678"
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Create a strong password"
+              required
+            />
+          </div>
+          {role === 'agent' && (
+            <div className={styles.formGroup}>
+              <label>Agency Name</label>
+              <input
+                type="text"
+                name="agency_name"
+                value={formData.agency_name}
+                onChange={handleChange}
+                placeholder="E.g. Ray White"
+              />
+            </div>
+          )}
+          <button type="submit" className={`btn-primary ${styles.authSubmitBtn}`}>
+            Create Account
+          </button>
+        </form>
+        <p className={styles.authLinks}>
+          Already have an account? <Link to="/login">Sign in</Link>
+        </p>
+      </div>
     </div>
   )
 }

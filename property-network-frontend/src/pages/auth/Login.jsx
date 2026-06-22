@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import authService from '../../services/authService'
+import styles from './Auth.module.css'
 
 const Login = () => {
   const [role, setRole] = useState('buyer')
@@ -26,39 +27,52 @@ const Login = () => {
   }
 
   return (
-    <div style={{ maxWidth: '400px', margin: '100px auto', padding: '20px' }}>
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Role</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="buyer">Buyer</option>
-            <option value="agent">Agent</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      <p>Don't have an account? <Link to="/register">Register</Link></p>
+    <div className={styles.authPage}>
+      <Link to="/" className={styles.backHome}>← Back to Property Network</Link>
+      <div className={styles.overlay}></div>
+      <div className={`glass-panel ${styles.authContainer}`}>
+        <h2 className={styles.authTitle}>Welcome Back</h2>
+        <p className={styles.authSubtitle}>Sign in to your account</p>
+        
+        {error && <p style={{ color: '#e53e3e', marginBottom: '1rem', fontWeight: 600 }}>{error}</p>}
+        
+        <form onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <label>I am a</label>
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="buyer">Buyer</option>
+              <option value="agent">Real Estate Agent</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+          <div className={styles.formGroup}>
+            <label>Email Address</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <button type="submit" className={`btn-primary ${styles.authSubmitBtn}`}>
+            Sign In
+          </button>
+        </form>
+        <p className={styles.authLinks}>
+          Don't have an account? <Link to="/register">Create one here</Link>
+        </p>
+      </div>
     </div>
   )
 }
