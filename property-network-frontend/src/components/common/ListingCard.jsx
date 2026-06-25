@@ -1,12 +1,9 @@
 import { Link } from 'react-router-dom';
+import { getPropertyImage } from '../../utils/helpers';
 import styles from './ListingCard.module.css';
 
 const ListingCard = ({ listing, basePath = '/buyer/listings' }) => {
-  // Use a fallback image if no photos are available. 
-  // We can use the hero house as a nice fallback for the demo.
-  const imageUrl = listing.ListingPhotos && listing.ListingPhotos.length > 0 
-    ? `http://localhost:5000${listing.ListingPhotos[0].photo_url}`
-    : '/hero_house.png';
+  const imageUrl = getPropertyImage(listing);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-US', {

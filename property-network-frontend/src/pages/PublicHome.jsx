@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
+import { getPropertyImage } from '../utils/helpers'
 import styles from './PublicHome.module.css'
 
 const PublicHome = () => {
@@ -81,9 +82,7 @@ const PublicHome = () => {
                 <div 
                   className={styles.cardImage}
                   style={{
-                    backgroundImage: listing.ListingPhotos && listing.ListingPhotos.length > 0
-                      ? `url(${listing.ListingPhotos[0].photo_path})`
-                      : 'url(/hero_house.png)' // fallback
+                    backgroundImage: `url(${getPropertyImage(listing)})`
                   }}
                 ></div>
                 <div className={styles.cardContent}>

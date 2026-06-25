@@ -5,6 +5,7 @@ import api from '../../services/api';
 import Spinner from '../../components/common/Spinner';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
+import { getPropertyImage } from '../../utils/helpers';
 import styles from './ListingDetail.module.css';
 
 const ListingDetail = () => {
@@ -68,9 +69,7 @@ const ListingDetail = () => {
   if (loading) return <Spinner />;
   if (!listing) return <div className={styles.container}><p>Listing not found</p></div>;
 
-  const heroImage = listing.ListingPhotos && listing.ListingPhotos.length > 0 
-    ? `http://localhost:5000${listing.ListingPhotos[0].photo_url}`
-    : '/hero_house.png';
+  const heroImage = getPropertyImage(listing);
 
   return (
     <div className={styles.page}>

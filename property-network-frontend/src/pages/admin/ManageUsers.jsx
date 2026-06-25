@@ -10,8 +10,13 @@ const ManageUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await api.get('/users')
-        setUsers(res.data.data)
+        const [buyersRes, agentsRes] = await Promise.all([
+          api.get('/admin/buyers'),
+          api.get('/admin/agents')
+        ])
+        const mappedBuyers = buyersRes.data.data.map(u => ({ ...u, role: 'buyer', user_id: `b_${u.buyer_id}` }))
+        const mappedAgents = agentsRes.data.data.map(u => ({ ...u, role: 'agent', user_id: `a_${u.agent_id}` }))
+        setUsers([...mappedBuyers, ...mappedAgents])
       } catch (err) {
         console.error('Failed to fetch users', err)
       } finally {

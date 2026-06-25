@@ -14,12 +14,16 @@ const Dashboard = () => {
     // Mocking an admin stats fetch
     const fetchAdminData = async () => {
       try {
-        const [usersRes, propertiesRes] = await Promise.all([
-          api.get('/users').catch(() => ({ data: { data: [] } })),
+        const [buyersRes, agentsRes, propertiesRes] = await Promise.all([
+          api.get('/admin/buyers').catch(() => ({ data: { data: [] } })),
+          api.get('/admin/agents').catch(() => ({ data: { data: [] } })),
           api.get('/listings').catch(() => ({ data: { data: [] } }))
         ])
+        
+        const totalUsers = (buyersRes.data?.data?.length || 0) + (agentsRes.data?.data?.length || 0)
+        
         setStats({
-          users: usersRes.data?.data?.length || 0,
+          users: totalUsers,
           properties: propertiesRes.data?.data?.length || 0,
           reports: 0
         })

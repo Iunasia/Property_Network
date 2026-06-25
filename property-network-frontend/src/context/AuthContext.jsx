@@ -4,8 +4,22 @@ import { jwtDecode } from 'jwt-decode'
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [token, setToken] = useState(localStorage.getItem('token') || null)
+  const getInitialState = () => {
+    const token = localStorage.getItem('token') || null
+    let user = null
+    if (token) {
+      try {
+        user = jwtDecode(token)
+      } catch {
+        localStorage.removeItem('token')
+      }
+    }
+    return { token, user: token ? user : null }
+  }
+
+  const initialState = getInitialState()
+  const [user, setUser] = useState(initialState.user)
+  const [token, setToken] = useState(initialState.token)
 
   useEffect(() => {
     if (token) {
@@ -17,6 +31,8 @@ export const AuthProvider = ({ children }) => {
         setToken(null)
         localStorage.removeItem('token')
       }
+    } else {
+      setUser(null)
     }
   }, [token])
 
@@ -36,4 +52,4 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   )
-}
+}

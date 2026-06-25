@@ -12,7 +12,7 @@ const ManageListings = () => {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const res = await api.get('/listings/agent/me')
+        const res = await api.get('/agents/listings')
         setListings(res.data.data)
       } catch (err) {
         console.error('Failed to fetch listings', err)

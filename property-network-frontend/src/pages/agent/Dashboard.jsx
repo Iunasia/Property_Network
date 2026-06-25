@@ -13,7 +13,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const res = await api.get('/listings/agent/me')
+        const res = await api.get('/agents/listings')
         const listings = res.data.data
         const active = listings.filter(l => l.status === 'available').length
         setStats({ totalListings: listings.length, activeListings: active })

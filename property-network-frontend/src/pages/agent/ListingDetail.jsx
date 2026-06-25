@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import api from '../../services/api'
 import Spinner from '../../components/common/Spinner'
 import Button from '../../components/common/Button'
+import { getPropertyImage } from '../../utils/helpers'
 
 const ListingDetail = () => {
   const { id } = useParams()
@@ -26,9 +27,7 @@ const ListingDetail = () => {
   if (loading) return <Spinner />
   if (!listing) return <p style={{ padding: '40px', textAlign: 'center' }}>Listing not found</p>
 
-  const heroImage = listing.ListingPhotos && listing.ListingPhotos.length > 0 
-    ? `http://localhost:5000${listing.ListingPhotos[0].photo_url}`
-    : '/hero_house.png'
+  const heroImage = getPropertyImage(listing)
 
   return (
     <div style={{ maxWidth: '1000px', margin: '40px auto', padding: '0 20px' }}>
